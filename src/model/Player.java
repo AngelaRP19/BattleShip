@@ -5,8 +5,8 @@ public class Player {
 	private Board board;
 	private String name;
 	
-	public Player(String nombre, int f, int c, int numShips) {
-		this.board = new Board(f,c,numShips);
+	public Player(String nombre,int size) {
+		this.board = new Board(size);
 		this.name = nombre;
 	}
 
