@@ -1,14 +1,8 @@
 package presenter;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-
-import model.Direction;
 import model.Game;
 import view.ViewBattleship;
 
@@ -50,6 +44,7 @@ public class Presenter implements ActionListener {
 			this.game = new Game(view.getName().getText(),Integer.parseInt(view.getSize().getText()));
 			this.addListenerButtons();
 		}else if(e.getSource() == view.getNextButton()) {
+			this.disableButtons();
 			view.generateGamePanel();
 			this.addListenerButtons();
 			game.randomShips(5, game.getOponent());
@@ -57,7 +52,7 @@ public class Presenter implements ActionListener {
 			game.randomShips(3,game.getOponent());
 			game.randomShips(3,game.getOponent());
 			game.randomShips(2,game.getOponent());
-			this.fieldValue();
+			//this.fieldValue();
 			
 			//TOMAR LA OPCION DE BARCO Y DIRECCION ESCOGIDA
 		}else if(e.getSource()==view.getPortaavion()){
@@ -90,11 +85,22 @@ public class Presenter implements ActionListener {
 					this.fieldValue();
 					view.getBoardPlayer().repaint();
 				}
+			//SI EL ORIGEN DE LA ACCION ES UN BOTON DEL TABLERO DE LA MAQUINA (COMIENZO DEL JUEGO)
 			}else if(cord[2].equals("MAQUINA")){
+				this.game.attackField(row,column);
 				//this.valueofopponent();
+				game.attackPlayer(10);
 				this.fieldValue();
 			}
 			//EVALUAR LA POSICION DEL BOTON QUE SE OPRIMIO, SI ES DE MAQUINA, ATACA, SI ES DE JUGADOR UBICA BARCO
+		}
+	}
+
+	private void disableButtons() {
+		for (int i = 0; i < view.getButtons().length; i++) {
+			for (int j = 0; j < view.getButtons()[i].length; j++) {
+				view.getButtons()[i][j].setEnabled(false);
+			}
 		}
 	}
 
@@ -116,6 +122,11 @@ public class Presenter implements ActionListener {
 				}else if (!game.getOponent().getBoard().getPlayerFields()[i][j].isFree()) {
 					view.setColorButton(i, j, "MACHINE");
 				}
+				if (game.getOponent().getBoard().getPlayerFields()[i][j].isAttacked()) {
+					view.setColorButton(i, j, "ATTACK");
+				}
+				if (game.getPlayer().getBoard().getPlayerFields()[i][j].isAttacked())
+					view.setColorButton(i, j, "ATMAQ");
 			}
 		}
 	}

@@ -14,11 +14,6 @@ public class Game {
 	}
 	
 
-	// dos jugadores cada uno con sus barcos
-	//ubicar los barcos aleatoriamente para el oponente
-	//validar las posiciones 
-	//si se encuentra una parte del barco a partir de la toma de celdas aleatorias, se evaluan 
-
 	public void randomShips(int sizeShip, Player p) {
 		System.out.println("su"+sizeShip);
 		boolean shipLocated = false;
@@ -108,7 +103,16 @@ public class Game {
 		 Random numberRandom = new Random();
 		 int random  = numberRandom.nextInt((max-min)+1)+(min);
 		 return random; 
-}
+	}
+	public void attackField(int row, int column) {
+		this.oponent.getBoard().getPlayerFields()[row][column].setAttacked(true);
+	}
+	public void attackPlayer(int sizeBoard) {
+		int x = this.getRandomNumber(0, sizeBoard);
+		int y = this.getRandomNumber(0, sizeBoard);
+		while(!this.oponent.getBoard().getPlayerFields()[x][y].isAttacked())
+			this.oponent.getBoard().getPlayerFields()[x][y].setAttacked(true);
+	}
 	public Player getPlayer() {
 		return player;
 	}
@@ -124,6 +128,9 @@ public class Game {
 	public void setOponent(Player oponent) {
 		this.oponent = oponent;
 	}
+
+
+	
 
 
 	
