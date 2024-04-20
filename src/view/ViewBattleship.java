@@ -2,8 +2,10 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -69,6 +71,8 @@ public class ViewBattleship {
 		this.principalFrame = new JFrame("BATALLA NAVAL");
 		//this.principalFrame.setBounds(400, 100, 800, 600);
 		this.principalFrame.setBounds(0,0, 500, 300);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.principalFrame.setLocation((int) screenSize.getWidth()/2 - this.principalFrame.getWidth()/2, (int) screenSize.getHeight()/2 - this.principalFrame.getHeight()/2);
 		this.principalFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.initButtons();
 	}
@@ -248,16 +252,39 @@ public class ViewBattleship {
             }
         }
 		//framePrincipal.add(panel);
-	}
+	}/*
+	public void putShip(int row, int colum, int sizeShip, String direction) {
+		sizeShip = sizeShip - 1;
+		buttons[row][colum].setBackground(Color.red);
+		buttons[row][colum].setEnabled(false);;
+		if(direction.equals("top")) {
+			for (int i = row-sizeShip; i < row; i++) {
+				
+				buttons[i][colum].setBackground(Color.red);
+				buttons[i][colum].setEnabled(false);;
+			}
+		}else if(direction.equals("bottom")) {
+			for (int i = row; i <= row+sizeShip; i++) {
+				buttons[i][colum].setBackground(Color.red);
+				buttons[i][colum].setEnabled(false);;
+			}
+		}else if(direction.equals("left")) {
+			for (int i = colum-sizeShip; i < colum; i++) {
+				buttons[row][i].setBackground(Color.red);
+				buttons[row][i].setEnabled(false);
+			}
+		}else {//right
+			for (int i = colum; i <= colum+sizeShip; i++) {
+				buttons[row][i].setBackground(Color.red);
+				buttons[row][i].setEnabled(false);
+			}
+		}
+	}*/
 	public void setColorButton(int row, int colum, String typeButton) {
 		if(typeButton.equals("SHIP"))
 			this.getButtons()[row][colum].setBackground(Color.red);
 		else if(typeButton.equals("MACHINE"))
 			this.getButtons()[row][colum].setBackground(Color.green);
-		else if(typeButton.equals("ATTACK"))
-			this.getButtons()[row][colum].setBackground(Color.YELLOW);
-		else if(typeButton.equals("ATMAQ"))
-			this.getButtons()[row][colum].setBackground(Color.ORANGE);
 	}
 	public JPanel getBoardPlayer() {
 		return boardPlayer;
