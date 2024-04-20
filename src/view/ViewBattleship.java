@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.Dimension;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -68,7 +70,12 @@ public class ViewBattleship {
 			
 		this.principalFrame = new JFrame("BATALLA NAVAL");
 		//this.principalFrame.setBounds(400, 100, 800, 600);
-		this.principalFrame.setBounds(0,0, 500, 300);
+		this.principalFrame.setSize(600, 400);
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - this.principalFrame.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - this.principalFrame.getHeight()) / 2);
+		this.principalFrame.setLocation(x, y);
+		this.principalFrame.setResizable(false);
 		this.principalFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.initButtons();
 	}
@@ -101,6 +108,9 @@ public class ViewBattleship {
 		
 		this.title = new JLabel("BATALLA NAVAL");
 		this.title.setFont(new Font("Tahoma", Font.BOLD, 30));
+		this.title.setForeground(Color.BLACK);
+		this.title.setHorizontalAlignment(JLabel.CENTER);
+		this.title.setVerticalAlignment(JLabel.CENTER);
 		
 		this.panelRegister = new JPanel(new BorderLayout());
 		this.panelRegister.setBackground(Color.gray);
@@ -111,12 +121,12 @@ public class ViewBattleship {
 		this.panelRegister.add(new JLabel(this.image), BorderLayout.CENTER);
 		
 		this.data = new JPanel(new GridLayout(5,1));
-		this.labelName = new JLabel("Ingresa tu nombre");
+		this.labelName = new JLabel("  Ingresa tu nombre");
 		this.name = new JTextField(20);
 		this.data.setBackground(Color.gray);
-		this.labelSize = new JLabel("Ingresa el tamaño de la cuadricula");
+		this.labelSize = new JLabel("  Ingresa el tamaño de la cuadricula");
 		this.size = new JTextField("10");
-		
+
 
 		data.add(labelName);
 		data.add(name);
