@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
@@ -77,16 +78,21 @@ public class ViewBattleship {
 	////
 	private JPanel panelEndGame;
 	private JLabel finishGame;
+	private Image iconImage;
 	
 	public ViewBattleship() {
 			
 		this.principalFrame = new JFrame("BATALLA NAVAL");
-		this.principalFrame.setSize(600, 400);
+		this.principalFrame.setSize(700, 500);
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - this.principalFrame.getWidth()) / 2);
 		int y = (int) ((dimension.getHeight() - this.principalFrame.getHeight()) / 2);
 		this.principalFrame.setLocation(x, y);
 		this.principalFrame.setResizable(false);
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		this.iconImage = toolkit.getImage("src//resources//icon.jpg"); 
+		this.principalFrame.setIconImage(iconImage);
+
 		this.principalFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.initButtons();
 		this.color = new Color(20,34,43,255);
@@ -323,7 +329,7 @@ public class ViewBattleship {
 		else if(typeButton.equals("SHIP_PLAYER_ATTACKED"))
 			this.getButtonsPlayer()[row][colum].setBackground(Color.RED);
 		else if(typeButton.equals("SHIP_MACHINE_ATTACKED"))
-			this.getButtonsMachine()[row][colum].setBackground(Color.ORANGE);
+			this.getButtonsMachine()[row][colum].setBackground(Color.RED);
 	}
 	public void finishGame(String winner) {
 		this.principalFrame.remove(this.principalPanel);

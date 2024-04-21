@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Color;
 import java.util.Random;
 
 public class Game {
@@ -147,10 +146,5 @@ public class Game {
 
 	
 
-	
-
-
-	
-
-	
 }
+
