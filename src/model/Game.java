@@ -15,7 +15,6 @@ public class Game {
 	
 
 	public void randomShips(int sizeShip, Player p) {
-		System.out.println("su"+sizeShip);
 		boolean shipLocated = false;
 		int x,y, dir;
 		int sizeBoard = this.oponent.getBoard().getPlayerFields().length;
@@ -32,10 +31,11 @@ public class Game {
 				direction = "left";
 			else 
 				direction = "right";
+			//System.out.println(x+ y+ sizeShip+ direction+ sizeBoard);
 			if(this.validatePosition(x, y, sizeShip, direction, sizeBoard,p )) {
-				System.out.println(x+ y+ sizeShip+ direction+ sizeBoard);
-				if(oponent.getBoard().getPlayerFields()[x][y].isFree()){
-					this.putShip(x, y, sizeShip, direction, this.oponent);
+				
+				if(p.getBoard().getPlayerFields()[x][y].isFree()){
+					this.putShip(x, y, sizeShip, direction, p);
 					shipLocated = true;
 				}
 			}
@@ -43,39 +43,39 @@ public class Game {
 		 }
 	}
 	//validar que no salga de los limites, y no pase sobre otro barco
-	public boolean validatePosition(int row, int colum, int sizeShip, String direction, int sizeBoard, Player p) {
-		boolean valid = true;
-		if(direction.equals("top")) {
-			if(row-sizeShip < 0)
-				valid = false;
-			for (int i = row-sizeShip; i < row && valid; i++) {
-				if(!p.getBoard().getPlayerFields()[i][colum].isFree())
+		public boolean validatePosition(int row, int colum, int sizeShip, String direction, int sizeBoard, Player p) {
+			boolean valid = true;
+			if(direction.equals("top")) {
+				if(row-sizeShip < 0)
 					valid = false;
-			}
-		}else if(direction.equals("bottom")) {
-			if(row+sizeShip > sizeBoard)
-				valid = false;
-			for (int i = row; i < row+sizeShip && valid; i++) {
-				if(!p.getBoard().getPlayerFields()[i][colum].isFree())
+				for (int i = row-sizeShip; i < row && valid; i++) {
+					if(!p.getBoard().getPlayerFields()[i][colum].isFree())
+						valid = false;
+				}
+			}else if(direction.equals("bottom")) {
+				if(row+sizeShip > sizeBoard)
 					valid = false;
-			}
-		}else if(direction.equals("left")) {
-			if(colum-sizeShip < 0)
-				valid = false;
-			for (int i = colum-sizeShip; i < colum && valid; i++) {
-				if(!p.getBoard().getPlayerFields()[row][i].isFree())
+				for (int i = row; i < row+sizeShip && valid; i++) {
+					if(!p.getBoard().getPlayerFields()[i][colum].isFree())
+						valid = false;
+				}
+			}else if(direction.equals("left")) {
+				if(colum-sizeShip < 0)
 					valid = false;
-			}
-		}else {//right
-			if(colum+sizeShip > sizeBoard)
-				valid = false;
-			for (int i = colum; i <= colum+sizeShip && valid; i++) {
-				if(!p.getBoard().getPlayerFields()[row][i].isFree())
+				for (int i = colum-sizeShip; i < colum && valid; i++) {
+					if(!p.getBoard().getPlayerFields()[row][i].isFree())
+						valid = false;
+				}
+			}else {//right
+				if(colum+sizeShip >= sizeBoard)
 					valid = false;
+				for (int i = colum; i <= colum+sizeShip && valid; i++) {
+					if(!p.getBoard().getPlayerFields()[row][i].isFree())
+						valid = false;
+				}
 			}
+			return valid;
 		}
-		return valid;
-	}
 	public void putShip(int row, int colum, int sizeShip, String direction, Player p) {
 		
 		sizeShip = sizeShip - 1;
@@ -108,11 +108,26 @@ public class Game {
 		this.oponent.getBoard().getPlayerFields()[row][column].setAttacked(true);
 	}
 	public void attackPlayer(int sizeBoard) {
-		int x = this.getRandomNumber(0, sizeBoard);
-		int y = this.getRandomNumber(0, sizeBoard);
-		while(!this.oponent.getBoard().getPlayerFields()[x][y].isAttacked())
-			this.oponent.getBoard().getPlayerFields()[x][y].setAttacked(true);
+		int x = this.getRandomNumber(0, sizeBoard-1);
+		int y = this.getRandomNumber(0, sizeBoard-1);
+		while(!this.player.getBoard().getPlayerFields()[x][y].isAttacked())
+			this.player.getBoard().getPlayerFields()[x][y].setAttacked(true);
 	}
+	
+	public boolean evaluateLosse(Player p) {
+		boolean winner = true;
+		for (int i = 0; i < p.getBoard().getPlayerFields().length; i++) {
+			for (int j = 0; j < p.getBoard().getPlayerFields().length; j++) {
+				if(!p.getBoard().getPlayerFields()[i][j].isFree()) {
+					if (!p.getBoard().getPlayerFields()[i][j].isAttacked()) {
+						winner = false;
+					}
+				}
+			}
+		}
+		return winner;
+	}
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -129,6 +144,8 @@ public class Game {
 		this.oponent = oponent;
 	}
 
+
+	
 
 	
 

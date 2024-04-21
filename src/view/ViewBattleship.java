@@ -2,21 +2,30 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ViewBattleship {
 	
- 
+	private Font font;
+	private Color color;
+	
 	private JFrame principalFrame;
 	private JPanel principalPanel;
 	//COMPONENTES FRAME INICIAL
@@ -28,7 +37,7 @@ public class ViewBattleship {
 	private JLabel labelName;
 	private JTextField name;
 	private JLabel labelSize;
-	private JTextField size;
+	private JComboBox<Integer> sizeBoards;
 	
 	private JButton startButton;
 
@@ -40,6 +49,7 @@ public class ViewBattleship {
 	private JRadioButton portaavion;
 	private JRadioButton acorazado;
 	private JRadioButton destructor;
+	private JRadioButton destructor2;
 	private JRadioButton submarino;
 	
 	private ButtonGroup direction;
@@ -53,7 +63,8 @@ public class ViewBattleship {
 	
 	//COMPONENTES FRAME DEL JUEGO 
 	private JPanel mainPanel;
-	private JButton[][] buttons;
+	private JButton[][] buttonsMachine;
+	private JButton[][] buttonsPlayer;
 	private JPanel centralPanel;
 	
 	private JPanel panelPlayer;
@@ -63,47 +74,83 @@ public class ViewBattleship {
 	private JPanel boardOpponent;
 	private JLabel playerName;
 	private JLabel opponentName;
+	////
+	private JPanel panelEndGame;
+	private JLabel finishGame;
 	
 	public ViewBattleship() {
 			
 		this.principalFrame = new JFrame("BATALLA NAVAL");
-		//this.principalFrame.setBounds(400, 100, 800, 600);
-		this.principalFrame.setBounds(0,0, 500, 300);
+		this.principalFrame.setSize(600, 400);
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - this.principalFrame.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - this.principalFrame.getHeight()) / 2);
+		this.principalFrame.setLocation(x, y);
+		this.principalFrame.setResizable(false);
 		this.principalFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.initButtons();
+		this.color = new Color(20,34,43,255);
 	}
 	private void initButtons() {
 		this.startButton = new JButton("Comenzar");
+		
 		this.nextButton = new JButton("Jugar");
 		
+		this.sizeBoards = new JComboBox<Integer>();
+		for (int i = 10; i <= 20; i++) {
+			this.sizeBoards.addItem(i);
+		}
 		this.optionShip = new ButtonGroup();
 		
 		this.portaavion = new JRadioButton("Portaavión. (5 celdas)");
+		portaavion.setBackground(new Color(115,137,133,255));
 		this.acorazado = new JRadioButton("Acorazado. (4 celdas)");
-		this.destructor = new JRadioButton("Destructor. (3 celdas)");
+		acorazado.setBackground(new Color(115,137,133,255));
+		this.destructor = new JRadioButton("Destructor Uno. (3 celdas)");
+		destructor.setBackground(new Color(115,137,133,255));
+		this.destructor2 = new JRadioButton("Destructor Dos. (3 celdas)");		
+		destructor2.setBackground(new Color(115,137,133,255));
 		this.submarino = new JRadioButton("Submarino. (2 celdas)");
+		submarino.setBackground(new Color(115,137,133,255));
 		
 		this.optionShip.add(portaavion);
 		this.optionShip.add(acorazado);
 		this.optionShip.add(destructor);
+		this.optionShip.add(destructor2);
 		this.optionShip.add(submarino);
 		
 		this.direction = new ButtonGroup();
 		
 		this.top = new JRadioButton("Arriba");
+		top.setBackground(new Color(115,137,133,255));
 		this.bottom = new JRadioButton("Abajo");
+		bottom.setBackground(new Color(115,137,133,255));
 		this.left = new JRadioButton("Izquierda");
+		left.setBackground(new Color(115,137,133,255));
 		this.right = new JRadioButton("Derecha");
+		right.setBackground(new Color(115,137,133,255));
 	}
 	//Panel de inicio donde se ingresa el nombre del jugador
 	public void register() {
 		this.principalPanel = new JPanel(new BorderLayout());
-		
 		this.title = new JLabel("BATALLA NAVAL");
-		this.title.setFont(new Font("Tahoma", Font.BOLD, 30));
+				
+		this.font = new Font("Tahoma", 5, 10);
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, new File("src//resources//fonts//Caveat.ttf")).deriveFont(Font.PLAIN, 50);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.title.setFont(font);
+		this.title.setForeground(Color.WHITE);
+		this.title.setHorizontalAlignment(JLabel.CENTER);
+		this.title.setVerticalAlignment(JLabel.CENTER);
+		
 		
 		this.panelRegister = new JPanel(new BorderLayout());
-		this.panelRegister.setBackground(Color.gray);
+		this.panelRegister.setBackground(color);
 		this.panelRegister.add(this.title, BorderLayout.NORTH);
 		
 		this.image = new ImageIcon("src//resources//register2.jpg");
@@ -112,16 +159,22 @@ public class ViewBattleship {
 		
 		this.data = new JPanel(new GridLayout(5,1));
 		this.labelName = new JLabel("Ingresa tu nombre");
-		this.name = new JTextField(20);
-		this.data.setBackground(Color.gray);
-		this.labelSize = new JLabel("Ingresa el tamaño de la cuadricula");
-		this.size = new JTextField("10");
 		
-
+		this.labelName.setForeground(Color.WHITE);
+		this.labelName.setFont(new Font("Tahoma",5,15));
+		this.name = new JTextField("Jugador");
+		this.data.setBackground(this.color);
+		this.labelSize = new JLabel("Ingresa el tamaño de la cuadricula");
+		this.labelSize.setFont(new Font("Tahoma",5,15));
+		this.labelSize.setForeground(Color.WHITE);
+		this.startButton.setBackground(new Color(52,74,79,255));
+		this.startButton.setForeground(Color.WHITE);
+		this.startButton.setFont(new Font("Tahoma",Font.BOLD,20));
+		
 		data.add(labelName);
 		data.add(name);
 		data.add(labelSize);
-		data.add(size);
+		data.add(this.sizeBoards);
 		data.add(startButton);
 		panelRegister.add(data, BorderLayout.SOUTH);
 		this.principalPanel.add(panelRegister);
@@ -131,18 +184,22 @@ public class ViewBattleship {
 	public void locateShips() {
 		this.principalFrame.remove(this.principalPanel);
 		this.principalPanel = new JPanel(new BorderLayout());
-		
 		this.chooseShips = new JPanel(new BorderLayout());
+		this.chooseShips.setBackground(new Color(115,137,133,255));
 		
 		this.generateShipsPanel();
 		this.generatePanelOptions();
 		this.chooseShips.add(new JLabel("Ubica tus barcos"), BorderLayout.NORTH);
+		
 		
 		JPanel content = new JPanel(new BorderLayout());
 		content.add(panelOptions, BorderLayout.WEST);
 		content.add(panelShips, BorderLayout.CENTER);
 		this.chooseShips.add(content, BorderLayout.CENTER);
 		
+		this.nextButton.setBackground(new Color(52,74,79,255));
+		this.nextButton.setForeground(Color.WHITE);
+		this.nextButton.setFont(new Font("Tahoma",Font.BOLD,20));
 		this.chooseShips.add(nextButton, BorderLayout.SOUTH);
 		
 		this.principalPanel.add(chooseShips);
@@ -154,21 +211,23 @@ public class ViewBattleship {
 		this.title = new JLabel("Selecciona el boton del que partirá tu barco");
 		this.panelShips = new JPanel(new BorderLayout());
 		this.panelShips.add(this.title, BorderLayout.NORTH);
-		
+		this.panelShips.setBackground(new Color(115,137,133,255));
 		this.boardPlayer = new JPanel();
+		this.boardPlayer.setBackground(new Color(115,137,133,255));
 		this.generateBoard( this.boardPlayer, "PLAYER");
+		this.buttonsPlayer = this.buttonsMachine;
 		this.panelShips.add(boardPlayer, BorderLayout.CENTER);
 		
-		//this.generatePanelOptions();
-		//this.principalFrame.add(panelShips);
 	}
 	public void generatePanelOptions() {
-		this.panelOptions = new JPanel(new GridLayout(10,1));
+		this.panelOptions = new JPanel(new GridLayout(11,1));
 		this.panelOptions.add(new JLabel("Selecciona el barco que quieres ubicar"));
-			
+		this.panelOptions.setBackground(new Color(115,137,133,255));
+		
 		this.panelOptions.add(portaavion);
 		this.panelOptions.add(acorazado);
 		this.panelOptions.add(destructor);
+		this.panelOptions.add(destructor2);
 		this.panelOptions.add(submarino);
 		
 		this.panelOptions.add(new JLabel("Selecciona la direccion en que ira el barco"));
@@ -183,8 +242,6 @@ public class ViewBattleship {
 		this.panelOptions.add(left);
 		this.panelOptions.add(right);
 		
-		//this.principalFrame.add(panelOptions);
-		
 	}
 	public void generateGamePanel(){
 		this.principalFrame.remove(this.principalPanel);
@@ -195,23 +252,27 @@ public class ViewBattleship {
 		
 		this.centralPanel = new JPanel(new GridLayout(1,2));//panel que contiene los paneles de los tableros
 		
-		//GENERO UN PANEL QUE CONTENGA EL TABLERO
-		/*
-		this.boardPlayer = new JPanel();
-		this.generateBoard(10, 10, this.boardPlayer);
-		*/
+		
 		//GENERO UN LABEL QUE TENGA EL NOMBRE DEL JUGADOR
 		this.playerName = new JLabel(this.name.getText());
+		this.playerName.setHorizontalAlignment(JLabel.CENTER);
+		this.playerName.setVerticalAlignment(JLabel.CENTER);
 		//HAGO UN PANEL SECUNDARIO QUE CONTENGA EL NOMBRE DEL JUGADOR Y SU TABLERO
 		this.panelPlayer = new JPanel();
+		this.panelPlayer.setBackground(new Color(115,137,133,255));
 		this.generateSidePanel(boardPlayer, playerName, panelPlayer);
 		
 		//this.mainPanel.add(this.panelPlayer, BorderLayout.WEST);
 
 		this.boardOpponent = new JPanel();
+		this.boardOpponent.setBackground(new Color(115,137,133,255));
 		this.generateBoard(this.boardOpponent, "MAQUINA");
 		this.opponentName = new JLabel("Máquina");
+		this.opponentName.setHorizontalAlignment(JLabel.CENTER);
+		this.opponentName.setVerticalAlignment(JLabel.CENTER);
+		
 		this.panelOpponent = new JPanel();
+		this.panelOpponent.setBackground(new Color(115,137,133,255));
 		this.generateSidePanel(boardOpponent, opponentName, panelOpponent);
 		
 		//this.mainPanel.add(this.panelOpponent, BorderLayout.EAST);
@@ -219,7 +280,7 @@ public class ViewBattleship {
 		this.centralPanel.add(panelOpponent);
 		
 		this.mainPanel.add(centralPanel, BorderLayout.CENTER);
-		this.mainPanel.add(new JLabel("BATTLESHIP"), BorderLayout.SOUTH);
+		//this.mainPanel.add(new JLabel("BATTLESHIP"), BorderLayout.SOUTH);
 		
 		this.principalPanel.add(mainPanel);
 		this.principalFrame.add(principalPanel, BorderLayout.CENTER);
@@ -233,31 +294,57 @@ public class ViewBattleship {
 		
 	}
 	public void generateBoard ( JPanel panel, String typeBoard) {
-		int  rows = Integer.parseInt(this.getSize().getText());
+		int  rows = (int) this.sizeBoards.getSelectedItem();
 		int columns = rows;
 		panel.setLayout(new GridLayout(rows,columns));
-		this.buttons = new JButton[rows][columns];
+		this.buttonsMachine = new JButton[rows][columns];
 		
 		for (int i = 0; i < rows; i++) {
 
             for (int j = 0; j < columns; j++) {
             	
-				buttons[i][j] = new JButton(); 
-				buttons[i][j].setActionCommand(i+"-"+j+"-"+typeBoard);
-				panel.add(buttons[i][j]);
+				buttonsMachine[i][j] = new JButton(); 
+				buttonsMachine[i][j].setActionCommand(i+"-"+j+"-"+typeBoard);
+				panel.add(buttonsMachine[i][j]);
             }
         }
 		//framePrincipal.add(panel);
 	}
 	public void setColorButton(int row, int colum, String typeButton) {
-		if(typeButton.equals("SHIP"))
-			this.getButtons()[row][colum].setBackground(Color.red);
-		else if(typeButton.equals("MACHINE"))
-			this.getButtons()[row][colum].setBackground(Color.green);
-		else if(typeButton.equals("ATTACK"))
-			this.getButtons()[row][colum].setBackground(Color.YELLOW);
-		else if(typeButton.equals("ATMAQ"))
-			this.getButtons()[row][colum].setBackground(Color.ORANGE);
+		if(typeButton.equals("SHIP_PLAYER"))
+			this.getButtonsPlayer()[row][colum].setBackground(Color.BLACK);
+		/*else if(typeButton.equals("SHIP_MACHINE"))
+			this.getButtonsMachine()[row][colum].setBackground(Color.GRAY);*/
+		else if(typeButton.equals("ATTACK_MACHINE")) {
+			this.getButtonsMachine()[row][colum].setBackground(Color.BLUE);
+			this.getButtonsMachine()[row][colum].setEnabled(false);
+		}else if(typeButton.equals("ATTACK_PLAYER"))
+			this.getButtonsPlayer()[row][colum].setBackground(Color.BLUE);
+		else if(typeButton.equals("SHIP_PLAYER_ATTACKED"))
+			this.getButtonsPlayer()[row][colum].setBackground(Color.RED);
+		else if(typeButton.equals("SHIP_MACHINE_ATTACKED"))
+			this.getButtonsMachine()[row][colum].setBackground(Color.ORANGE);
+	}
+	public void finishGame(String winner) {
+		this.principalFrame.remove(this.principalPanel);
+		this.principalPanel = new JPanel(new BorderLayout());
+		
+		this.panelEndGame = new JPanel(new BorderLayout());
+		this.panelEndGame.setBackground(color);
+		if(winner.equals("player"))
+			winner = this.name.getText();
+		this.finishGame = new JLabel("GANADOR: "+winner);
+		this.finishGame.setFont(font);
+		this.finishGame.setForeground(Color.WHITE);
+		this.finishGame.setHorizontalAlignment(JLabel.CENTER);
+		this.finishGame.setVerticalAlignment(JLabel.CENTER);
+		
+		this.panelEndGame.add(finishGame, BorderLayout.CENTER);
+		
+		this.principalPanel.add(this.panelEndGame);
+		this.principalFrame.add(this.principalPanel, BorderLayout.CENTER);
+		this.principalFrame.revalidate();
+		this.principalFrame.repaint();
 	}
 	public JPanel getBoardPlayer() {
 		return boardPlayer;
@@ -295,12 +382,7 @@ public class ViewBattleship {
 	public void setMainPanel(JPanel mainPanel) {
 		this.mainPanel = mainPanel;
 	}
-	public JButton[][] getButtons() {
-		return buttons;
-	}
-	public void setButtons(JButton[][] buttons) {
-		this.buttons = buttons;
-	}
+	
 	public JPanel getCentralPanel() {
 		return centralPanel;
 	}
@@ -349,6 +431,12 @@ public class ViewBattleship {
 	public void setDestructor(JRadioButton destructor) {
 		this.destructor = destructor;
 	}
+	public JRadioButton getDestructor2() {
+		return destructor2;
+	}
+	public void setDestructor2(JRadioButton destructor2) {
+		this.destructor2 = destructor2;
+	}
 	public JRadioButton getSubmarino() {
 		return submarino;
 	}
@@ -385,11 +473,23 @@ public class ViewBattleship {
 	public void setNextButton(JButton nextButton) {
 		this.nextButton = nextButton;
 	}
-	public JTextField getSize() {
-		return size;
+	public JButton[][] getButtonsMachine() {
+		return buttonsMachine;
 	}
-	public void setSize(JTextField size) {
-		this.size = size;
+	public void setButtonsMachine(JButton[][] buttons) {
+		this.buttonsMachine = buttons;
+	}
+	public JButton[][] getButtonsPlayer() {
+		return buttonsPlayer;
+	}
+	public void setButtonsPlayer(JButton[][] buttonsPlayer) {
+		this.buttonsPlayer = buttonsPlayer;
+	}
+	public JComboBox<Integer> getSizeBoards() {
+		return sizeBoards;
+	}
+	public void setSizeBoards(JComboBox<Integer> sizeBoards) {
+		this.sizeBoards = sizeBoards;
 	}
 	
 }

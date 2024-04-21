@@ -26,6 +26,13 @@ public class Player {
 		this.name = name;
 	}
 
+	public boolean shipAttacked(int i, int j) {
+		boolean shipAttacked = false;
+		if(this.board.getPlayerFields()[i][j].isAttacked() && !this.board.getPlayerFields()[i][j].isFree())
+			shipAttacked = true;
+		return shipAttacked;
+	}
+
 	
 	
 	

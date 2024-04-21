@@ -4,7 +4,6 @@ public class Ship {
 
 	private int sizeShip;
 	private boolean isAlive;
-	private TypeShip type;
 	
 	public Ship( int sizeShip, boolean isAlive) {
 		
@@ -28,13 +27,5 @@ public class Ship {
 		this.isAlive = isAlive;
 	}
 
-	public TypeShip getType() {
-		return type;
-	}
-
-	public void setType(TypeShip type) {
-		this.type = type;
-	}
-	
 	
 }
